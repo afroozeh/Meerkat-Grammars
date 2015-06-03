@@ -2,6 +2,8 @@ package benchmark
 
 import org.meerkat.tmp._
 import org.meerkat.tmp.Parsers._
+import org.meerkat.util._
+import org.meerkat.benchmark.MeerkatBenchmark
 
 object JavaBenchmark {
 	
@@ -10,10 +12,7 @@ object JavaBenchmark {
   
   
   def main(args: Array[String]): Unit = {
-    val f = "/Users/aliafroozeh/Test.java"
-    val input: String = scala.io.Source.fromFile(f).mkString
-    
-    parse(input, start(CompilationUnit))
+    MeerkatBenchmark(start(CompilationUnit), "/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19".load("java")).run
   }
   
 }

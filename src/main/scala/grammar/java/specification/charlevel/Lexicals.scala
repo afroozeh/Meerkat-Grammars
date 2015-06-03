@@ -20,15 +20,13 @@ object Lexicals {
     syn ( "\\" ~~ u.++ ~~ HexDigit ~~ HexDigit ~~ HexDigit ~~ HexDigit )
     
     val RawInputCharacter = 
-    syn ( "[^\\]".r  // Todo: Add a not combiantor 
+    syn ( """[^\\]""".r  // Todo: Add a not combiantor 
         | "\\".!>>("""[u\\]""".r) 
         | "\\\\" 
         )
     
     val InputCharacter = 
     syn ( UnicodeInputCharacter.\("\r", "\n") | "\u0000")
-    
-
     
     val LineTerminator = 
     syn ( "\r" | "\n" )
