@@ -65,7 +65,7 @@ object Lexicals {
         | LineTerminator
         )
     
-    val Identifier= 
+    val Identifier: Nonterminal = 
     syn ( IdentifierChars.\(Keyword).!>>("""[$0-9A-Z_a-z]""".r).!<<("""[$0-9A-Z_a-z]""".r) )
     
     val IdentifierChars: Nonterminal = 
@@ -272,8 +272,7 @@ object Lexicals {
     val Keyword:Regex = """abstract|continue|for|new|switch|assert|default|if|package|synchronized|boolean|do|goto|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while|true|false|null""".r
     
     // (WhiteSpace | Comment)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//";
-//    override val Layout: Nonterminal = 
-//    syn          (((Comment | WhiteSpace).!.**).!>>("\t", "\n", "\r", "\f", " ", "/*", "//"))
+    val Layout: Nonterminal = 
+    syn (((Comment | WhiteSpace).!.**).!>>("\t", "\n", "\r", "\f", " ", "/*", "//"))
 
-  
 }

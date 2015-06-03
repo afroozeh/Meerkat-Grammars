@@ -11,7 +11,7 @@ import org.meerkat.Syntax._
 import org.meerkat.tmp._
 import org.meerkat.tmp.Parsers._
 import org.meerkat.tmp.OperatorParsers._
-import org.meerkat.tmp.DefaultLayout._
+// import org.meerkat.tmp.DefaultLayout._
 import java.specification.charlevel.Lexicals._
 
 /**
@@ -20,6 +20,8 @@ import java.specification.charlevel.Lexicals._
  * 
  */
 object JavaCharlevel {
+  
+    implicit val L = layout(Layout)
   
     val Type: Nonterminal =  
     syn ( PrimitiveType 
