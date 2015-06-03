@@ -89,7 +89,7 @@ object JavaCharlevel {
     syn ( Annotation.* ~ "package" ~ QualifiedIdentifier ~ ";" )
     
     val ImportDeclaration: Nonterminal = 
-    syn ( "import" ~ "static".? ~ Identifier.+(".") ~ (toTerminal(".") ~ "*").!.? ~ ";" )
+    syn ( "import" ~ "static".? ~ Identifier.+(".") ~ ("." ~ "*").!.? ~ ";" )
     
     val TypeDeclaration: Nonterminal = 
     syn ( ClassDeclaration 
@@ -220,7 +220,7 @@ object JavaCharlevel {
     syn ( "{" ~ AnnotationTypeElementDeclaration.* ~ "}" )
     
     val AnnotationTypeElementDeclaration: Nonterminal = 
-    syn ( AbstractMethodModifier.* ~ Type ~ Identifier ~ "(" ~ ")" ~ (toTerminal("[") ~ "]").!.* ~ DefaultValue.? ~ ";" 
+    syn ( AbstractMethodModifier.* ~ Type ~ Identifier ~ "(" ~ ")" ~ ("[" ~ "]").!.* ~ DefaultValue.? ~ ";" 
         | ConstantDeclaration 
         | ClassDeclaration 
         | InterfaceDeclaration 
@@ -252,7 +252,7 @@ object JavaCharlevel {
     syn ( VariableDeclaratorId ~ ("=" ~ VariableInitializer).!.? )
     
     val VariableDeclaratorId: Nonterminal = 
-    syn ( Identifier ~ (toTerminal("[") ~ "]").!.* )
+    syn ( Identifier ~ ("[" ~ "]").!.* )
     
     val VariableInitializer: Nonterminal = 
     syn ( ArrayInitializer 
@@ -368,9 +368,9 @@ object JavaCharlevel {
     val Statement: Nonterminal = 
     syn ( StatementWithoutTrailingSubstatement 
         | Identifier ~ ":" ~ Statement 
-        | toTerminal("if") ~ "(" ~ Expression ~ ")" ~ Statement 
-        | toTerminal("if") ~ "(" ~ Expression ~ ")" ~ StatementNoShortIf ~ "else" ~ Statement 
-        | toTerminal("while") ~ "(" ~ Expression ~ ")" ~ Statement 
+        | "if" ~ "(" ~ Expression ~ ")" ~ Statement 
+        | "if" ~ "(" ~ Expression ~ ")" ~ StatementNoShortIf ~ "else" ~ Statement 
+        | "while" ~ "(" ~ Expression ~ ")" ~ Statement 
         | ForStatement
         )
     
@@ -379,12 +379,12 @@ object JavaCharlevel {
         | ";" 
         | StatementExpression ~ ";" 
         | "assert" ~ Expression ~ (":" ~ Expression).!.? ~ ";" 
-        | toTerminal("switch") ~ "(" ~ Expression ~ ")" ~ "{" ~ SwitchBlockStatementGroup.* ~ SwitchLabel.* ~ "}" 
+        | "switch" ~ "(" ~ Expression ~ ")" ~ "{" ~ SwitchBlockStatementGroup.* ~ SwitchLabel.* ~ "}" 
         | "do" ~ Statement ~ "while" ~ "(" ~ Expression ~ ")" ~ ";" 
         | "break" ~ Identifier.? ~ ";" 
         | "continue" ~ Identifier.? ~ ";" 
         | "return" ~ Expression.? ~ ";" 
-        | toTerminal("synchronized") ~ "(" ~ Expression ~ ")" ~ Block 
+        | "synchronized" ~ "(" ~ Expression ~ ")" ~ Block 
         | "throw" ~ Expression ~ ";" 
         | "try" ~ Block ~ (CatchClause.+ | (CatchClause.* ~ Finally).!).! 
         | "try" ~ ResourceSpecification ~ Block ~ CatchClause.* ~ Finally.?
@@ -393,14 +393,14 @@ object JavaCharlevel {
     val StatementNoShortIf: Nonterminal = 
     syn ( StatementWithoutTrailingSubstatement 
         | Identifier ~ ":" ~ StatementNoShortIf 
-        | toTerminal("if") ~ "(" ~ Expression ~ ")" ~ StatementNoShortIf ~ "else" ~ StatementNoShortIf 
-        | toTerminal("while") ~ "(" ~ Expression ~ ")" ~ StatementNoShortIf 
-        | toTerminal("for") ~ "(" ~ ForInit.? ~ ";" ~ Expression.? ~ ";" ~ ForUpdate.? ~ ")" ~ StatementNoShortIf
+        | "if" ~ "(" ~ Expression ~ ")" ~ StatementNoShortIf ~ "else" ~ StatementNoShortIf 
+        | "while" ~ "(" ~ Expression ~ ")" ~ StatementNoShortIf 
+        | "for" ~ "(" ~ ForInit.? ~ ";" ~ Expression.? ~ ";" ~ ForUpdate.? ~ ")" ~ StatementNoShortIf
         )
     
     val ForStatement: Nonterminal = 
-    syn ( toTerminal("for") ~ "(" ~ ForInit.? ~ ";" ~ Expression.? ~ ";" ~ ForUpdate.? ~ ")" ~ Statement 
-        | toTerminal("for") ~ "(" ~ FormalParameter ~ ":" ~ Expression ~ ")" ~ Statement
+    syn ( "for" ~ "(" ~ ForInit.? ~ ";" ~ Expression.? ~ ";" ~ ForUpdate.? ~ ")" ~ Statement 
+        | "for" ~ "(" ~ FormalParameter ~ ":" ~ Expression ~ ")" ~ Statement
         )
     
     val StatementExpression: Nonterminal =
@@ -414,7 +414,7 @@ object JavaCharlevel {
         )
     
     val CatchClause: Nonterminal = 
-    syn ( toTerminal("catch") ~ "(" ~ VariableModifier.* ~ CatchType ~ Identifier ~ ")" ~ Block )
+    syn ( "catch" ~ "(" ~ VariableModifier.* ~ CatchType ~ Identifier ~ ")" ~ Block )
     
     val CatchType: Nonterminal = 
     syn ( QualifiedIdentifier.+("|") )
@@ -436,7 +436,7 @@ object JavaCharlevel {
     
     val SwitchLabel: Nonterminal = 
     syn ( "case" ~ ConstantExpression ~ ":" 
-        | toTerminal("default") ~ ":"
+        | "default" ~ ":"
         )
     
     val LocalVariableDeclaration: Nonterminal =  
@@ -458,7 +458,7 @@ object JavaCharlevel {
     val PrimaryNoNewArray: Nonterminal =  
     syn ( Literal 
         | Type ~ "." ~ "class" 
-    		| toTerminal("void") ~ "." ~ "class" 
+    		| "void" ~ "." ~ "class" 
     		| "this" 
     		| ClassName ~ "." ~ "this" 
     		| "(" ~ Expression ~ ")" 
@@ -495,7 +495,7 @@ object JavaCharlevel {
         )
     
     val TypeArgumentsOrDiamond: Nonterminal = 
-    syn ( toTerminal("<") ~ ">" 
+    syn ( "<" ~ ">" 
         | TypeArguments
         )
     
@@ -503,8 +503,8 @@ object JavaCharlevel {
     syn (Expression.+(","))
     
     val ArrayCreationExpression: Nonterminal = 
-    syn ( "new" ~ (PrimitiveType | ReferenceType).! ~ DimExpr.+ ~ (toTerminal("[") ~ "]").!.* 
-        | "new" ~ (PrimitiveType | ReferenceTypeNonArrayType).! ~ (toTerminal("[") ~ "]").!.+ ~ ArrayInitializer
+    syn ( "new" ~ (PrimitiveType | ReferenceType).! ~ DimExpr.+ ~ ("[" ~ "]").!.* 
+        | "new" ~ (PrimitiveType | ReferenceTypeNonArrayType).! ~ ("[" ~ "]").!.+ ~ ArrayInitializer
         )
     
     val DimExpr: Nonterminal = 
@@ -512,14 +512,14 @@ object JavaCharlevel {
     
     val FieldAccess: Nonterminal = 
     syn ( Primary ~ "." ~ Identifier 
-        | toTerminal("super") ~ "." ~ Identifier 
+        | "super" ~ "." ~ Identifier 
         | ClassName ~ "." ~ "super" ~ "." ~ Identifier
         )
     
     val MethodInvocation: Nonterminal = 
     syn ( MethodName ~ "(" ~ ArgumentList.? ~ ")" 
         | Primary ~ "." ~ NonWildTypeArguments.? ~ Identifier ~ "(" ~ ArgumentList.? ~ ")" 
-        | toTerminal("super") ~ "." ~ NonWildTypeArguments.? ~ Identifier ~ "(" ~ ArgumentList.? ~ ")" 
+        | "super" ~ "." ~ NonWildTypeArguments.? ~ Identifier ~ "(" ~ ArgumentList.? ~ ")" 
         | ClassName ~ "." ~ "super" ~ "." ~ NonWildTypeArguments.? ~ Identifier ~ "(" ~ ArgumentList.? ~ ")" 
         | TypeName ~ "." ~ NonWildTypeArguments ~ Identifier ~ "(" ~ ArgumentList.? ~ ")"
         )
