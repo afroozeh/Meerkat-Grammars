@@ -21,14 +21,12 @@ import java.specification.charlevel.Lexicals._
  */
 object JavaCharlevel {
   
-    
-  
-    val Type =  
+    val Type: Nonterminal =  
     syn ( PrimitiveType 
         | ReferenceType 
         )
   
-    val PrimitiveType = 
+    val PrimitiveType: Nonterminal = 
     syn ( "byte" 
         | "short" 
         | "char" 
@@ -39,73 +37,73 @@ object JavaCharlevel {
         | "boolean" 
         )
     
-    val ReferenceType = 
+    val ReferenceType: Nonterminal = 
     syn ( TypeDeclSpecifier ~ TypeArguments.? 
         | ArrayType 
         )
 
-    val ReferenceTypeNonArrayType = 
+    val ReferenceTypeNonArrayType: Nonterminal = 
     syn ( TypeDeclSpecifier ~ TypeArguments.? )
     
-    val TypeList =  
+    val TypeList: Nonterminal =  
     syn ( Type.+(",") )
 
-    val TypeName =  
+    val TypeName: Nonterminal =  
     syn ( QualifiedIdentifier )
 
-    val TypeVariable =  
+    val TypeVariable: Nonterminal =  
     syn ( Identifier )
 
-    val ArrayType =  
+    val ArrayType: Nonterminal =  
     syn ( Type ~ "[" ~ "]" )
 
-    val TypeParameters = 
+    val TypeParameters: Nonterminal = 
     syn ( "<" ~ TypeParameter.+(",") ~ ">" )
     
-    val TypeParameter =
+    val TypeParameter: Nonterminal =
     syn ( TypeVariable ~ TypeBound.? )
     
-    val TypeBound = 
+    val TypeBound: Nonterminal = 
     syn ( "extends" ~ ReferenceType.+("&") )
     
-    val TypeArguments =
+    val TypeArguments: Nonterminal =
     syn ( "<" ~ TypeArgument.+(",") ~ ">" )
     
-    val TypeArgument = 
+    val TypeArgument: Nonterminal = 
     syn ( Type 
         | "?" ~ (("extends" | "super").! ~ Type).!.?
         )
     
-    val QualifiedIdentifier = 
+    val QualifiedIdentifier: Nonterminal = 
     syn ( Identifier.+(".") )
     
-    val QualifiedIdentifierList = 
+    val QualifiedIdentifierList: Nonterminal = 
     syn ( QualifiedIdentifier.+(",") )
     
-    val CompilationUnit = 
+    val CompilationUnit: Nonterminal = 
     syn ( PackageDeclaration.? ~ ImportDeclaration.* ~ TypeDeclaration.* )
     
-    val PackageDeclaration = 
+    val PackageDeclaration: Nonterminal = 
     syn ( Annotation.* ~ "package" ~ QualifiedIdentifier ~ ";" )
     
-    val ImportDeclaration = 
+    val ImportDeclaration: Nonterminal = 
     syn ( "import" ~ "static".? ~ Identifier.+(".") ~ ("." ~ "*").!.? ~ ";" )
     
-    val TypeDeclaration = 
+    val TypeDeclaration: Nonterminal = 
     syn ( ClassDeclaration 
         | InterfaceDeclaration 
-        | ';'
+        | ";"
         )
     
-    val ClassDeclaration = 
+    val ClassDeclaration: Nonterminal = 
     syn ( NormalClassDeclaration 
         | EnumDeclaration
         )
     
-    val NormalClassDeclaration = 
+    val NormalClassDeclaration: Nonterminal = 
     syn ( ClassModifier.* ~ "class" ~ Identifier ~ TypeParameters.? ~ ("extends" ~ Type).!.? ~ ("implements" ~ TypeList).!.? ~ ClassBody )
     
-    val ClassModifier = 
+    val ClassModifier: Nonterminal = 
     syn ( Annotation 
         | "public" 
         | "protected" 
@@ -116,7 +114,7 @@ object JavaCharlevel {
         | "strictfp"
         )
     
-    val ClassBody = 
+    val ClassBody: Nonterminal = 
     syn ( "{" ~ ClassBodyDeclaration.* ~ "}" )
     
     val ClassBodyDeclaration = 
@@ -126,38 +124,38 @@ object JavaCharlevel {
         | ConstructorDeclaration
         )
     
-    val InstanceInitializer = 
+    val InstanceInitializer: Nonterminal = 
     syn ( Block )
     
-    val StaticInitializer = 
+    val StaticInitializer: Nonterminal = 
     syn ( "static" ~ Block )
     
-    val ConstructorDeclaration = 
+    val ConstructorDeclaration: Nonterminal = 
     syn ( ConstructorModifier.* ~ ConstructorDeclarator ~ Throws.? ~ ConstructorBody )
     
-    val ConstructorModifier = 
+    val ConstructorModifier: Nonterminal = 
     syn ( Annotation 
         | "public" 
         | "protected" 
         | "private"
         )
     
-    val ConstructorDeclarator = 
+    val ConstructorDeclarator: Nonterminal = 
     syn ( TypeParameters.? ~ Identifier ~ "(" ~ FormalParameterList.? ~ ")" )
     
-    val ConstructorBody = 
+    val ConstructorBody: Nonterminal = 
     syn ( "{" ~ ExplicitConstructorInvocation.? ~ BlockStatement.* ~ "}" )
     
-    val ExplicitConstructorInvocation = 
+    val ExplicitConstructorInvocation: Nonterminal = 
     syn ( NonWildTypeArguments.? ~ "this" ~ "(" ~ ArgumentList.? ~ ")" ~ ";" 
         | NonWildTypeArguments.? ~ "super" ~ "(" ~ ArgumentList.? ~ ")" ~ ";" 
         | Primary ~ "." ~ NonWildTypeArguments.? ~ "super" ~ "(" ~ ArgumentList.? ~ ")" ~ ";"
         )
     
-    val NonWildTypeArguments = 
+    val NonWildTypeArguments: Nonterminal = 
     syn ( "<" ~ ReferenceType.+(",") ~ ">" )
     
-    val ClassMemberDeclaration = 
+    val ClassMemberDeclaration: Nonterminal = 
     syn ( FieldDeclaration 
         | MethodDeclaration 
         | ClassDeclaration 
@@ -165,15 +163,15 @@ object JavaCharlevel {
         | ";"
         )
     
-    val InterfaceDeclaration =
+    val InterfaceDeclaration: Nonterminal =
     syn ( NormalInterfaceDeclaration 
         | AnnotationTypeDeclaration
         )
     
-    val NormalInterfaceDeclaration = 
+    val NormalInterfaceDeclaration: Nonterminal = 
     syn ( InterfaceModifier.* ~ "interface" ~ Identifier ~ TypeParameters.? ~ ("extends" ~ TypeList).!.? ~ InterfaceBody )
     
-    val InterfaceModifier = 
+    val InterfaceModifier: Nonterminal = 
     syn ( Annotation 
         | "public" 
         | "protected" 
@@ -183,10 +181,10 @@ object JavaCharlevel {
         | "strictfp"
         )
     
-    val InterfaceBody = 
+    val InterfaceBody: Nonterminal = 
     syn ( "{" ~ InterfaceMemberDeclaration.* ~ "}" )
     
-    val InterfaceMemberDeclaration = 
+    val InterfaceMemberDeclaration: Nonterminal = 
     syn ( ConstantDeclaration 
         | AbstractMethodDeclaration 
         | ClassDeclaration 
@@ -194,32 +192,32 @@ object JavaCharlevel {
         | ";"
         )
     
-    val ConstantDeclaration = 
+    val ConstantDeclaration: Nonterminal = 
     syn ( ConstantModifier.* ~ Type ~ VariableDeclarators ~ ";" )
     
-    val ConstantModifier = 
+    val ConstantModifier: Nonterminal = 
     syn ( Annotation 
         | "public" 
         | "static" 
         | "final"
         )
     
-    val AbstractMethodDeclaration = 
-    syn ( AbstractMethodModifier.* ~ TypeParameters.? ~ Result ~ MethodDeclarator ~ Throws.? ~ ';' )
+    val AbstractMethodDeclaration: Nonterminal = 
+    syn ( AbstractMethodModifier.* ~ TypeParameters.? ~ Result ~ MethodDeclarator ~ Throws.? ~ ";" )
     
-    val AbstractMethodModifier = 
+    val AbstractMethodModifier: Nonterminal = 
     syn ( Annotation 
         | "public" 
         | "abstract"
         )
     
-    val AnnotationTypeDeclaration = 
+    val AnnotationTypeDeclaration: Nonterminal = 
     syn ( InterfaceModifier.* ~ "@" ~ "interface" ~ Identifier ~ AnnotationTypeBody )
     
-    val AnnotationTypeBody = 
+    val AnnotationTypeBody: Nonterminal = 
     syn ( "{" ~ AnnotationTypeElementDeclaration.* ~ "}" )
     
-    val AnnotationTypeElementDeclaration = 
+    val AnnotationTypeElementDeclaration: Nonterminal = 
     syn ( AbstractMethodModifier.* ~ Type ~ Identifier ~ "(" ~ ")" ~ ("[" ~ "]").!.* ~ DefaultValue.? ~ ";" 
         | ConstantDeclaration 
         | ClassDeclaration 
@@ -228,13 +226,13 @@ object JavaCharlevel {
         | ";"
         )
     
-    val DefaultValue =  
+    val DefaultValue: Nonterminal =  
     syn ( "default" ~ ElementValue )
     
-    val FieldDeclaration =  
+    val FieldDeclaration: Nonterminal =  
     syn ( FieldModifier.* ~ Type ~ VariableDeclarators ~ ";" )
     
-    val FieldModifier = 
+    val FieldModifier: Nonterminal = 
     syn ( Annotation 
         | "public" 
         | "protected" 
@@ -245,51 +243,51 @@ object JavaCharlevel {
         | "volatile"
         )
     
-    val VariableDeclarators = 
+    val VariableDeclarators: Nonterminal = 
     syn ( VariableDeclarator.+(",") )
     
-    val VariableDeclarator = 
+    val VariableDeclarator: Nonterminal = 
     syn ( VariableDeclaratorId ~ ("=" ~ VariableInitializer).!.? )
     
-    val VariableDeclaratorId = 
+    val VariableDeclaratorId: Nonterminal = 
     syn ( Identifier ~ ("[" ~ "]").!.* )
     
-    val VariableInitializer = 
+    val VariableInitializer: Nonterminal = 
     syn ( ArrayInitializer 
         | Expression 
         )
     
-    val ArrayInitializer = 
-    syn ( "{" ~ VariableInitializer.*(terminal(",")) ~ ",".? ~ "}" )
+    val ArrayInitializer: Nonterminal = 
+    syn ( "{" ~ VariableInitializer.*(",") ~ ",".? ~ "}" )
     
-    val MethodDeclaration = 
+    val MethodDeclaration: Nonterminal = 
     syn ( MethodHeader ~ MethodBody )
     
-    val MethodHeader = 
+    val MethodHeader: Nonterminal = 
     syn ( MethodModifier.* ~ TypeParameters.? ~ Result ~ MethodDeclarator ~ Throws.? )
     
-    val MethodDeclarator = 
+    val MethodDeclarator: Nonterminal = 
     syn ( Identifier ~ "(" ~ FormalParameterList.? ~ ")" 
         | MethodDeclarator ~ "[" ~ "]"
         )
     
-    val FormalParameterList = 
+    val FormalParameterList: Nonterminal = 
     syn ( (FormalParameter ~ ",").!.* ~ LastFormalParameter )
     
-    val FormalParameter =
+    val FormalParameter: Nonterminal =
     syn ( VariableModifier.* ~ Type ~ VariableDeclaratorId )
     
-    val VariableModifier =
+    val VariableModifier: Nonterminal =
     syn ( "final" 
         | Annotation
         )
     
-    val LastFormalParameter = 
+    val LastFormalParameter: Nonterminal = 
     syn ( VariableModifier.* ~ Type ~ "..." ~ VariableDeclaratorId
         | FormalParameter
         )
     
-    val MethodModifier =  
+    val MethodModifier: Nonterminal =  
     syn ( Annotation 
         | "public" 
         | "protected" 
@@ -302,70 +300,70 @@ object JavaCharlevel {
         | "strictfp"
         )
     
-    val Result = 
+    val Result: Nonterminal = 
     syn ( Type 
         | "void"
         )
     
-    val Throws = 
+    val Throws: Nonterminal = 
     syn ( "throws" ~ ExceptionType.+(",") )
     
-    val ExceptionType = 
+    val ExceptionType: Nonterminal = 
     syn ( TypeName )
     
-    val MethodBody =
+    val MethodBody: Nonterminal =
     syn ( Block 
-        | ';'
+        | ";"
         )
     
-    val Annotation = 
-    syn ( "@" ~ TypeName ~ "(" ~ ElementValuePair.*(terminal(",")) ~ ")"
+    val Annotation: Nonterminal = 
+    syn ( "@" ~ TypeName ~ "(" ~ ElementValuePair.*(",") ~ ")"
         | "@" ~ TypeName ~ ("(" ~ ElementValue ~ ")").!.?
         )
     
-    val ElementValuePair = 
+    val ElementValuePair: Nonterminal = 
     syn ( Identifier ~ "=" ~ ElementValue )
     
-    val ElementValue = 
+    val ElementValue: Nonterminal = 
     syn ( ConditionalExpression 
-        | Annotation 
+        | Annotation
         | ElementValueArrayInitializer
         )
     
-    val ElementValueArrayInitializer = 
+    val ElementValueArrayInitializer: Nonterminal = 
     syn ( "{" ~ ElementValues.? ~ ",".? ~ "}" )
     
-    val ElementValues = 
+    val ElementValues: Nonterminal = 
     syn ( ElementValue.+(",") )
     
-    val EnumDeclaration = 
+    val EnumDeclaration: Nonterminal = 
     syn ( ClassModifier.* ~ "enum" ~ Identifier ~ ("implements" ~ TypeList).!.? ~ EnumBody )
     
-    val EnumBody =
-    syn ( "{" ~ EnumConstant.*(terminal(',')) ~ ",".? ~ EnumBodyDeclarations.? ~ "}" )
+    val EnumBody: Nonterminal =
+    syn ( "{" ~ EnumConstant.*(",") ~ ",".? ~ EnumBodyDeclarations.? ~ "}" )
     
-    val EnumConstant = 
+    val EnumConstant: Nonterminal = 
     syn ( Annotation.* ~ Identifier ~ Arguments.? ~ ClassBody.? )
     
-    val Arguments = 
+    val Arguments: Nonterminal = 
     syn ( "(" ~ ArgumentList.? ~ ")" )
     
-    val EnumBodyDeclarations = 
+    val EnumBodyDeclarations: Nonterminal = 
     syn ( ";" ~ ClassBodyDeclaration.* )
     
-    val Block = 
+    val Block: Nonterminal = 
     syn ( "{" ~ BlockStatement.* ~ "}" )
     
-    val BlockStatement = 
+    val BlockStatement: Nonterminal = 
     syn ( LocalVariableDeclarationStatement 
         | ClassDeclaration 
         | Statement
         )
     
-    val LocalVariableDeclarationStatement = 
+    val LocalVariableDeclarationStatement: Nonterminal = 
     syn ( VariableModifier.* ~ Type ~ VariableDeclarators ~ ";" )
     
-    val Statement = 
+    val Statement: Nonterminal = 
     syn ( StatementWithoutTrailingSubstatement 
         | Identifier ~ ":" ~ Statement 
         | "if" ~ "(" ~ Expression ~ ")" ~ Statement 
@@ -374,7 +372,7 @@ object JavaCharlevel {
         | ForStatement
         )
     
-    val StatementWithoutTrailingSubstatement = 
+    val StatementWithoutTrailingSubstatement: Nonterminal = 
     syn ( Block 
         | ";" 
         | StatementExpression ~ ";" 
@@ -390,7 +388,7 @@ object JavaCharlevel {
         | "try" ~ ResourceSpecification ~ Block ~ CatchClause.* ~ Finally.?
         )
     
-    val StatementNoShortIf = 
+    val StatementNoShortIf: Nonterminal = 
     syn ( StatementWithoutTrailingSubstatement 
         | Identifier ~ ":" ~ StatementNoShortIf 
         | "if" ~ "(" ~ Expression ~ ")" ~ StatementNoShortIf ~ "else" ~ StatementNoShortIf 
@@ -398,12 +396,12 @@ object JavaCharlevel {
         | "for" ~ "(" ~ ForInit.? ~ ";" ~ Expression.? ~ ";" ~ ForUpdate.? ~ ")" ~ StatementNoShortIf
         )
     
-    val ForStatement = 
+    val ForStatement: Nonterminal = 
     syn ( "for" ~ "(" ~ ForInit.? ~ ";" ~ Expression.? ~ ";" ~ ForUpdate.? ~ ")" ~ Statement 
         | "for" ~ "(" ~ FormalParameter ~ ":" ~ Expression ~ ")" ~ Statement
         )
     
-    val StatementExpression =
+    val StatementExpression: Nonterminal =
     syn ( Assignment 
         | PreIncrementExpression 
         | PreDecrementExpression 
@@ -413,49 +411,49 @@ object JavaCharlevel {
         | ClassInstanceCreationExpression
         )
     
-    val CatchClause = 
+    val CatchClause: Nonterminal = 
     syn ( "catch" ~ "(" ~ VariableModifier.* ~ CatchType ~ Identifier ~ ")" ~ Block )
     
-    val CatchType = 
+    val CatchType: Nonterminal = 
     syn ( QualifiedIdentifier.+("|") )
     
-    val Finally = 
+    val Finally: Nonterminal = 
     syn ( "finally" ~ Block )
     
-    val ResourceSpecification = 
+    val ResourceSpecification: Nonterminal = 
     syn ( "(" ~ Resources ~ ";".? ~ ")" )
     
-    val Resources = 
+    val Resources: Nonterminal = 
     syn ( Resource.+(";") )
     
-    val Resource = 
+    val Resource: Nonterminal = 
     syn ( VariableModifier.* ~ ReferenceType ~ VariableDeclaratorId ~ "=" ~ Expression )
     
-    val SwitchBlockStatementGroup = 
+    val SwitchBlockStatementGroup: Nonterminal = 
     syn ( SwitchLabel.+ ~ BlockStatement.+ )
     
-    val SwitchLabel = 
+    val SwitchLabel: Nonterminal = 
     syn ( "case" ~ ConstantExpression ~ ":" 
         | "default" ~ ":"
         )
     
-    val LocalVariableDeclaration =  
-    syn ( VariableModifier.* ~ Type ~ VariableDeclarator.+(',') )
+    val LocalVariableDeclaration: Nonterminal =  
+    syn ( VariableModifier.* ~ Type ~ VariableDeclarator.+(",") )
     
-    val ForInit = 
-    syn ( StatementExpression.+(',') 
+    val ForInit: Nonterminal = 
+    syn ( StatementExpression.+(",") 
         | LocalVariableDeclaration
         )
     
-    val ForUpdate = 
-    syn ( StatementExpression.+(',') )
+    val ForUpdate: Nonterminal = 
+    syn ( StatementExpression.+(",") )
     
-    val Primary = 
+    val Primary: Nonterminal = 
     syn ( PrimaryNoNewArray 
         | ArrayCreationExpression
         )
     
-    val PrimaryNoNewArray =  
+    val PrimaryNoNewArray: Nonterminal =  
     syn ( Literal 
         | Type ~ "." ~ "class" 
     		| "void" ~ "." ~ "class" 
@@ -468,7 +466,7 @@ object JavaCharlevel {
     		| ArrayAccess
     		)
     
-    val Literal = 
+    val Literal: Nonterminal = 
     syn ( IntegerLiteral 
         | FloatingPointLiteral 
         | BooleanLiteral 
@@ -477,46 +475,46 @@ object JavaCharlevel {
         | NullLiteral
         )
     
-    val IntegerLiteral = 
-    syn ( DecimalIntegerLiteral.!>>('.') 
-        | HexIntegerLiteral.!>>('.') 
+    val IntegerLiteral: Nonterminal = 
+    syn ( DecimalIntegerLiteral.!>>(".") 
+        | HexIntegerLiteral.!>>(".") 
         | OctalIntegerLiteral 
         | BinaryIntegerLiteral
         )
     
-    val FloatingPointLiteral = 
+    val FloatingPointLiteral: Nonterminal = 
     syn ( DecimalFloatingPointLiteral 
         | HexadecimalFloatingPointLiteral
         )
     
-    val ClassInstanceCreationExpression = 
+    val ClassInstanceCreationExpression: Nonterminal = 
     syn ( "new" ~ TypeArguments.? ~ TypeDeclSpecifier ~ TypeArgumentsOrDiamond.? ~ "(" ~ ArgumentList.? ~ ")" ~ ClassBody.? 
         | (Primary | QualifiedIdentifier).! ~ "." ~ "new" ~ TypeArguments.? ~ Identifier ~ TypeArgumentsOrDiamond.? ~ "(" ~ ArgumentList.? ~ ")" ~ ClassBody.?
         )
     
-    val TypeArgumentsOrDiamond = 
+    val TypeArgumentsOrDiamond: Nonterminal = 
     syn ( "<" ~ ">" 
         | TypeArguments
         )
     
-    val ArgumentList =
-    syn (Expression.+(','))
+    val ArgumentList: Nonterminal =
+    syn (Expression.+(","))
     
-    val ArrayCreationExpression = 
+    val ArrayCreationExpression: Nonterminal = 
     syn ( "new" ~ (PrimitiveType | ReferenceType).! ~ DimExpr.+ ~ ("[" ~ "]").!.* 
         | "new" ~ (PrimitiveType | ReferenceTypeNonArrayType).! ~ ("[" ~ "]").!.+ ~ ArrayInitializer
         )
     
-    val DimExpr = 
+    val DimExpr: Nonterminal = 
     syn ("[" ~ Expression ~ "]")
     
-    val FieldAccess = 
+    val FieldAccess: Nonterminal = 
     syn ( Primary ~ "." ~ Identifier 
         | "super" ~ "." ~ Identifier 
         | ClassName ~ "." ~ "super" ~ "." ~ Identifier
         )
     
-    val MethodInvocation = 
+    val MethodInvocation: Nonterminal = 
     syn ( MethodName ~ "(" ~ ArgumentList.? ~ ")" 
         | Primary ~ "." ~ NonWildTypeArguments.? ~ Identifier ~ "(" ~ ArgumentList.? ~ ")" 
         | "super" ~ "." ~ NonWildTypeArguments.? ~ Identifier ~ "(" ~ ArgumentList.? ~ ")" 
@@ -524,7 +522,7 @@ object JavaCharlevel {
         | TypeName ~ "." ~ NonWildTypeArguments ~ Identifier ~ "(" ~ ArgumentList.? ~ ")"
         )
     
-    val ArrayAccess = 
+    val ArrayAccess: Nonterminal = 
     syn ( ExpressionName ~ "[" ~ Expression ~ "]" 
         | PrimaryNoNewArray ~ "[" ~ Expression ~ "]"
         )
@@ -539,7 +537,7 @@ object JavaCharlevel {
     val PostIncrementExpression: Nonterminal =
     syn ( PostfixExpression ~ "++" )
     
-    val PostDecrementExpression = 
+    val PostDecrementExpression: Nonterminal = 
     syn ( PostfixExpression ~ "--" )
     
     val UnaryExpression: Nonterminal = 
@@ -633,22 +631,22 @@ object JavaCharlevel {
   		  | ConditionalOrExpression ~ "?" ~ Expression ~ ":" ~ ConditionalExpression
     	  )
     
-    val AssignmentExpression = 
+    val AssignmentExpression: Nonterminal = 
     syn ( ConditionalExpression 
     	  | Assignment
     	  )
     
-    val Assignment = 
+    val Assignment: Nonterminal = 
     syn ( LeftHandSide ~ AssignmentOperator ~ AssignmentExpression )
     
-    val LeftHandSide = 
+    val LeftHandSide: Nonterminal = 
     syn ( ExpressionName 
     		| "(" ~ LeftHandSide ~ ")" 
     		| FieldAccess 
     		| ArrayAccess
     		)
     
-    val AssignmentOperator = 
+    val AssignmentOperator: Nonterminal = 
     syn ( "=" 
         | "+=" 
         | "-=" 
@@ -663,30 +661,30 @@ object JavaCharlevel {
         | ">>>="
         )
     
-    val Expression = 
+    val Expression: Nonterminal = 
     syn ( AssignmentExpression )
     
-    val ConstantExpression = 
+    val ConstantExpression: Nonterminal = 
     syn ( Expression )
     
-    val ClassName = 
+    val ClassName: Nonterminal = 
     syn ( QualifiedIdentifier )
     
-    val ExpressionName = 
+    val ExpressionName: Nonterminal = 
     syn ( QualifiedIdentifier )
     
-    val MethodName = 
+    val MethodName: Nonterminal = 
     syn ( QualifiedIdentifier )
     
-    val TypeDeclSpecifier = 
+    val TypeDeclSpecifier: Nonterminal = 
     syn ( Identifier ~ (TypeArguments.? ~ "." ~ Identifier).!.* )
     
-    val SuperSuffix = 
+    val SuperSuffix: Nonterminal = 
     syn ( Arguments 
         | "." ~ Identifier ~ Arguments.?
         )
     
-    val ExplicitGenericInvocationSuffix = 
+    val ExplicitGenericInvocationSuffix: Nonterminal = 
     syn ( "super" ~ SuperSuffix 
         | Identifier ~ Arguments
         )
