@@ -1,4 +1,4 @@
-package java.specification.charlevel
+package grammar.java.specification.charlevel
 
 import org.meerkat.Syntax._
 import org.meerkat.tmp._
@@ -74,10 +74,10 @@ object Lexicals {
         )
     
     val JavaLetter= 
-    syn ( "$_a-zA-Z".r )
+    syn ( "[$_a-zA-Z]".r )
     
     val JavaLetterOrDigit= 
-    syn ( "$_a-zA-Z0-9" )
+    syn ( "[$_a-zA-Z0-9]".r )
     
     
     val DecimalIntegerLiteral= 
@@ -115,7 +115,7 @@ object Lexicals {
         )
     
     val NonZeroDigit= 
-    syn ( "[0-9]".r )
+    syn ( "[1-9]".r )
     
     val DigitOrUnderscore= 
     syn ( Digit 

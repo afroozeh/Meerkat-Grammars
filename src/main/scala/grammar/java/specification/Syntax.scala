@@ -5,21 +5,21 @@
  *     Anastasia Izmaylova  <anastasia.izmaylova@cwi.nl>
  *     Ali Afroozeh         <ali.afroozeh@cwi.nl>
  */
-package org.meerkat.java7
+package grammar.java.specification
 
 import org.meerkat.Syntax._
 import org.meerkat.tmp._
 import org.meerkat.tmp.Parsers._
 import org.meerkat.tmp.OperatorParsers._
 // import org.meerkat.tmp.DefaultLayout._
-import java.specification.charlevel.Lexicals._
+import grammar.java.specification.charlevel.Lexicals._
 
 /**
  * 
  * The grammar of Java 7 
  * 
  */
-object JavaCharlevel {
+object Syntax {
   
     implicit val L = layout(Layout)
   
