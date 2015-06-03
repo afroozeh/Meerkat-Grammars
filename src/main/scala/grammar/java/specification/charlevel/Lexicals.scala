@@ -71,79 +71,78 @@ object Lexicals {
         | IdentifierChars ~~ JavaLetterOrDigit
         )
     
-    val JavaLetter= 
+    val JavaLetter = 
     syn ( "[$_a-zA-Z]".r )
     
-    val JavaLetterOrDigit= 
+    val JavaLetterOrDigit = 
     syn ( "[$_a-zA-Z0-9]".r )
     
-    
-    val DecimalIntegerLiteral= 
+    val DecimalIntegerLiteral = 
     syn ( DecimalNumeral ~~ IntegerTypeSuffix.? )
     
-    val HexIntegerLiteral= 
+    val HexIntegerLiteral = 
     syn ( HexNumeral ~~ IntegerTypeSuffix.? )
     
-    val OctalIntegerLiteral= 
+    val OctalIntegerLiteral = 
     syn ( OctalNumeral ~~ IntegerTypeSuffix.? )
     
-    val BinaryIntegerLiteral= 
+    val BinaryIntegerLiteral = 
     syn ( BinaryNumeral ~~ IntegerTypeSuffix.? )
     
-    val IntegerTypeSuffix= 
+    val IntegerTypeSuffix = 
     syn ( "l" | "L")
     
-    val underscore= 
+    val underscore = 
     syn ( "_" )
     
-    val DecimalNumeral= 
+    val DecimalNumeral = 
     syn( "0" 
        | NonZeroDigit ~~ Digits.? 
        | NonZeroDigit ~~ underscore.++ ~~ Digits
        )
     
-    val Digits= 
+    val Digits = 
     syn ( Digit 
         | Digit ~~ DigitOrUnderscore.** ~~ Digit
         )
     
-    val Digit= 
+    val Digit = 
     syn ( "0" 
         | NonZeroDigit
         )
     
-    val NonZeroDigit= 
+    val NonZeroDigit = 
     syn ( "[1-9]".r )
     
-    val DigitOrUnderscore= 
+    val DigitOrUnderscore = 
     syn ( Digit 
         | "_"
         )
     
-    val HexNumeral= 
+    val HexNumeral = 
     syn ( "0" ~~ "x" ~~ HexDigits 
         | "0" ~~ "X" ~~ HexDigits
         )
     
-    val HexDigits= 
+    val HexDigits = 
     syn ( HexDigit 
         | HexDigit ~~ HexDigitOrUnderscore.** ~~ HexDigit
         )
     
-    val HexDigit= 
-    syn ( "0-9a-fA-F".r )
+    val HexDigit = 
+    syn ( "[0-9a-fA-F]".r )
     
-    val HexDigitOrUnderscore= 
+    val HexDigitOrUnderscore = 
     syn ( HexDigit 
         | "_"
         )
     
-    val OctalNumeral= 
+    val OctalNumeral = 
     syn ( "0" ~~ OctalDigits 
         | "0" ~~ underscore.++ ~~ OctalDigits
         )
     
-    val OctalDigits= 
+    val OctalDigits = 
     syn ( OctalDigit 
         | OctalDigit ~~ OctalDigitOrUnderscore.** ~~ OctalDigit
         )
@@ -252,8 +251,8 @@ object Lexicals {
         )
     
     val OctalEscape= 
-    syn ( "\\" ~~ OctalDigit.!>>("""[0-7]""".r) 
-        | "\\" ~~ OctalDigit ~~ OctalDigit.!>>("""[0-7]""".r) 
+    syn ( "\\" ~~ OctalDigit.!>>("[0-7]".r) 
+        | "\\" ~~ OctalDigit ~~ OctalDigit.!>>("[0-7]".r) 
         | "\\" ~~ ZeroToThree ~~ OctalDigit ~~ OctalDigit
         )
     
