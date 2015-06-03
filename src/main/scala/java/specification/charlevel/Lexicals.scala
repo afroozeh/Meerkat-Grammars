@@ -1,4 +1,4 @@
-package java.specification
+package java.specification.charlevel
 
 import org.meerkat.Syntax._
 import org.meerkat.tmp._
@@ -272,8 +272,8 @@ object Lexicals {
     val Keyword:Regex = """abstract|continue|for|new|switch|assert|default|if|package|synchronized|boolean|do|goto|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while|true|false|null""".r
     
     // (WhiteSpace | Comment)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//";
-    override val Layout= 
-    syn          (((Comment | WhiteSpace).!.**).!>>("\t", "\n", "\r", "\f", " ", "/*", "//"))
+//    override val Layout: Nonterminal = 
+//    syn          (((Comment | WhiteSpace).!.**).!>>("\t", "\n", "\r", "\f", " ", "/*", "//"))
 
   
 }
