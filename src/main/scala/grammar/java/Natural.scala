@@ -661,9 +661,57 @@ object Natural {
         | ">>=" 
         | ">>>="
         )
-    
+        
     val Expression: Nonterminal = 
-    syn ( AssignmentExpression )
+    syn ( Expression ~ "." ~ Identifier
+        | Expression ~ "." ~ "this"
+        | Expression ~ "." ~ "new" ~ TypeArguments.? ~ Identifier ~ TypeArgumentsOrDiamond.? ~ "(" ~ ArgumentList.? ~ ")" ~ ClassBody.?
+        | Expression ~ "." ~ NonWildTypeArguments ~ ExplicitGenericInvocationSuffix    
+        | Expression ~ "." ~ "super" ~ ("." ~ Identifier).!.? ~ Arguments
+        | Type ~ "." ~ "class"
+        | "void" ~ "." ~ "class"
+        | Expression ~ "(" ~ ArgumentList.? ~ ")"     
+        | Expression ~ "[" ~ Expression ~ "]"
+        | Expression ~ "++"
+        | Expression ~ "--"
+        | "+".!>>("+") ~ Expression
+        | "-".!>>("-") ~ Expression
+        | "++" ~ Expression
+        | "--" ~ Expression 
+        | "!" ~ Expression
+        | "~" ~ Expression
+        | "new" ~ ClassInstanceCreationExpression
+        | "new" ~ ArrayCreationExpression
+        | "(" ~ PrimitiveType ~ ")" ~ Expression
+        | "(" ~ ReferenceType ~ ")" ~ Expression    
+        | Expression ~ "*" ~ Expression 
+        | Expression ~ "/" ~ Expression
+        | Expression ~ "%" ~ Expression
+        | Expression ~ "+".!>>("+") ~ Expression
+        | Expression ~ "-".!>>("-") ~ Expression
+        | Expression ~ "<<" ~ Expression 
+        | Expression ~ ">>".!>>(">") ~ Expression
+        | Expression ~ ">>>" ~ Expression
+        | Expression ~ "<".!>>("[=<]".r) ~ Expression
+        )
+
+
+
+//        | Expression ~ ">".!>>("[=>]".r) ~ Expression 
+//        | Expression ~ "<=" ~ Expression
+//        | Expression ~ ">=" ~ Expression
+//        | Expression ~ "instanceof" ~ Type 
+//        | Expression ~ "==" ~ Expression
+//        | Expression ~ "!=" ~ Expression
+//        | Expression ~ "&".!>>("&") Expression
+//        | Expression ~ "^" ~ Expression
+//        | Expression ~ "|".!>>("|") ~ Expression 
+//        | Expression ~ "&&" ~ Expression
+//        | Expression ~ "||" ~ Expression
+//        | Expression ~ "?" ~ Expression ~ ":" ~ Expression 
+//        | Expression ~ AssignmentOperator ~ Expression
+//        | "(" Expression ")"
+//        | Primary
     
     val ConstantExpression: Nonterminal = 
     syn ( Expression )
@@ -689,14 +737,4 @@ object Natural {
     syn ( "super" ~ SuperSuffix 
         | Identifier ~ Arguments
         )
-  
-//    
-//    
-//  import org.meerkat.util.Configuration._
-//  
-//  def main(args: Array[String]) {
-//     val input = scala.io.Source.fromFile("test-files/test.java").mkString              
-//     parse(input, start(CompilationUnit), ALL_PARSES, TESTING)
-//  }
-  
 }
