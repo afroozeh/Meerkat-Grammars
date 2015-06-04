@@ -1,12 +1,11 @@
-package grammar.java.specification.charlevel
+package grammar.java.lexicals
 
 import org.meerkat.Syntax._
 import org.meerkat.tmp._
 import org.meerkat.tmp.Parsers._
 import scala.collection.JavaConversions._
-import scala.util.matching.Regex
 
-object Lexicals {
+object CharLevel {
       
     val UnicodeInputCharacter = 
     syn ( UnicodeEscape 
@@ -266,7 +265,7 @@ object Lexicals {
     syn (" " | "\t" | "\n" | "\r" | "\f" | "\u0a1a")
 
     
-    val Keyword:Regex = """abstract|continue|for|new|switch|assert|default|if|package|synchronized|boolean|do|goto|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while|true|false|null""".r
+    val Keyword:scala.util.matching.Regex = """abstract|continue|for|new|switch|assert|default|if|package|synchronized|boolean|do|goto|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while|true|false|null""".r
     
     // (WhiteSpace | Comment)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//";
     val Layout: Nonterminal = 
