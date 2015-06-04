@@ -693,26 +693,23 @@ object Natural {
         | Expression ~ ">>".!>>(">") ~ Expression
         | Expression ~ ">>>" ~ Expression
         | Expression ~ "<".!>>("[=<]".r) ~ Expression
+        | Expression ~ ">".!>>("[=>]".r) ~ Expression 
+        | Expression ~ "<=" ~ Expression
+        | Expression ~ ">=" ~ Expression
+        | Expression ~ "instanceof" ~ Type 
+        | Expression ~ "==" ~ Expression
+        | Expression ~ "!=" ~ Expression
+        | Expression ~ "&".!>>("&") ~ Expression
+        | Expression ~ "^" ~ Expression
+        | Expression ~ "|".!>>("|") ~ Expression 
+        | Expression ~ "&&" ~ Expression
+        | Expression ~ "||" ~ Expression
+        | Expression ~ "?" ~ Expression ~ ":" ~ Expression 
+        | Expression ~ AssignmentOperator ~ Expression
+        | "(" ~ Expression ~ ")"
+        | Primary
         )
 
-
-
-//        | Expression ~ ">".!>>("[=>]".r) ~ Expression 
-//        | Expression ~ "<=" ~ Expression
-//        | Expression ~ ">=" ~ Expression
-//        | Expression ~ "instanceof" ~ Type 
-//        | Expression ~ "==" ~ Expression
-//        | Expression ~ "!=" ~ Expression
-//        | Expression ~ "&".!>>("&") Expression
-//        | Expression ~ "^" ~ Expression
-//        | Expression ~ "|".!>>("|") ~ Expression 
-//        | Expression ~ "&&" ~ Expression
-//        | Expression ~ "||" ~ Expression
-//        | Expression ~ "?" ~ Expression ~ ":" ~ Expression 
-//        | Expression ~ AssignmentOperator ~ Expression
-//        | "(" Expression ")"
-//        | Primary
-    
     val ConstantExpression: Nonterminal = 
     syn ( Expression )
     
