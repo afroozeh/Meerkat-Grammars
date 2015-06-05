@@ -255,7 +255,7 @@ object Natural {
     
     val VariableInitializer: Nonterminal = 
     syn ( ArrayInitializer 
-        | Expression 
+        | Expression($) 
         )
     
     val ArrayInitializer: Nonterminal = 
@@ -326,7 +326,7 @@ object Natural {
     syn ( Identifier ~ "=" ~ ElementValue )
     
     val ElementValue: Nonterminal = 
-    syn ( ConditionalExpression 
+    syn ( Expression($) 
         | Annotation
         | ElementValueArrayInitializer
         )
@@ -367,9 +367,9 @@ object Natural {
     val Statement: Nonterminal = 
     syn ( StatementWithoutTrailingSubstatement 
         | Identifier ~ ":" ~ Statement 
-        | "if" ~ "(" ~ Expression ~ ")" ~ Statement 
-        | "if" ~ "(" ~ Expression ~ ")" ~ StatementNoShortIf ~ "else" ~ Statement 
-        | "while" ~ "(" ~ Expression ~ ")" ~ Statement 
+        | "if" ~ "(" ~ Expression($) ~ ")" ~ Statement 
+        | "if" ~ "(" ~ Expression($) ~ ")" ~ StatementNoShortIf ~ "else" ~ Statement 
+        | "while" ~ "(" ~ Expression($) ~ ")" ~ Statement 
         | ForStatement
         )
     
@@ -377,14 +377,14 @@ object Natural {
     syn ( Block 
         | ";" 
         | StatementExpression ~ ";" 
-        | "assert" ~ Expression ~ (":" ~ Expression).!.? ~ ";" 
-        | "switch" ~ "(" ~ Expression ~ ")" ~ "{" ~ SwitchBlockStatementGroup.* ~ SwitchLabel.* ~ "}" 
-        | "do" ~ Statement ~ "while" ~ "(" ~ Expression ~ ")" ~ ";" 
+        | "assert" ~ Expression($) ~ (":" ~ Expression($)).!.? ~ ";" 
+        | "switch" ~ "(" ~ Expression($) ~ ")" ~ "{" ~ SwitchBlockStatementGroup.* ~ SwitchLabel.* ~ "}" 
+        | "do" ~ Statement ~ "while" ~ "(" ~ Expression($) ~ ")" ~ ";" 
         | "break" ~ Identifier.? ~ ";" 
         | "continue" ~ Identifier.? ~ ";" 
-        | "return" ~ Expression.? ~ ";" 
-        | "synchronized" ~ "(" ~ Expression ~ ")" ~ Block 
-        | "throw" ~ Expression ~ ";" 
+        | "return" ~ Expression($).? ~ ";" 
+        | "synchronized" ~ "(" ~ Expression($) ~ ")" ~ Block 
+        | "throw" ~ Expression($) ~ ";" 
         | "try" ~ Block ~ (CatchClause.+ | (CatchClause.* ~ Finally).!).! 
         | "try" ~ ResourceSpecification ~ Block ~ CatchClause.* ~ Finally.?
         )
@@ -392,25 +392,18 @@ object Natural {
     val StatementNoShortIf: Nonterminal = 
     syn ( StatementWithoutTrailingSubstatement 
         | Identifier ~ ":" ~ StatementNoShortIf 
-        | "if" ~ "(" ~ Expression ~ ")" ~ StatementNoShortIf ~ "else" ~ StatementNoShortIf 
-        | "while" ~ "(" ~ Expression ~ ")" ~ StatementNoShortIf 
-        | "for" ~ "(" ~ ForInit.? ~ ";" ~ Expression.? ~ ";" ~ ForUpdate.? ~ ")" ~ StatementNoShortIf
+        | "if" ~ "(" ~ Expression($) ~ ")" ~ StatementNoShortIf ~ "else" ~ StatementNoShortIf 
+        | "while" ~ "(" ~ Expression($) ~ ")" ~ StatementNoShortIf 
+        | "for" ~ "(" ~ ForInit.? ~ ";" ~ Expression($).? ~ ";" ~ ForUpdate.? ~ ")" ~ StatementNoShortIf
         )
     
     val ForStatement: Nonterminal = 
-    syn ( "for" ~ "(" ~ ForInit.? ~ ";" ~ Expression.? ~ ";" ~ ForUpdate.? ~ ")" ~ Statement 
-        | "for" ~ "(" ~ FormalParameter ~ ":" ~ Expression ~ ")" ~ Statement
+    syn ( "for" ~ "(" ~ ForInit.? ~ ";" ~ Expression($).? ~ ";" ~ ForUpdate.? ~ ")" ~ Statement 
+        | "for" ~ "(" ~ FormalParameter ~ ":" ~ Expression($) ~ ")" ~ Statement
         )
     
     val StatementExpression: Nonterminal =
-    syn ( Assignment 
-        | PreIncrementExpression 
-        | PreDecrementExpression 
-        | PostIncrementExpression 
-        | PostDecrementExpression 
-        | MethodInvocation
-        | ClassInstanceCreationExpression
-        )
+    syn ( Expression($) )
     
     val CatchClause: Nonterminal = 
     syn ( "catch" ~ "(" ~ VariableModifier.* ~ CatchType ~ Identifier ~ ")" ~ Block )
@@ -428,7 +421,7 @@ object Natural {
     syn ( Resource.+(";") )
     
     val Resource: Nonterminal = 
-    syn ( VariableModifier.* ~ ReferenceType ~ VariableDeclaratorId ~ "=" ~ Expression )
+    syn ( VariableModifier.* ~ ReferenceType ~ VariableDeclaratorId ~ "=" ~ Expression($) )
     
     val SwitchBlockStatementGroup: Nonterminal = 
     syn ( SwitchLabel.+ ~ BlockStatement.+ )
@@ -449,22 +442,11 @@ object Natural {
     val ForUpdate: Nonterminal = 
     syn ( StatementExpression.+(",") )
     
-    val Primary: Nonterminal = 
-    syn ( PrimaryNoNewArray 
-        | ArrayCreationExpression
-        )
-    
-    val PrimaryNoNewArray: Nonterminal =  
+    val Primary: Nonterminal =  
     syn ( Literal 
-        | Type ~ "." ~ "class" 
-    		| "void" ~ "." ~ "class" 
-    		| "this" 
-    		| ClassName ~ "." ~ "this" 
-    		| "(" ~ Expression ~ ")" 
-    		| ClassInstanceCreationExpression 
-    		| FieldAccess 
-    		| MethodInvocation 
-    		| ArrayAccess
+    		| "this"
+        | "super"
+    		| Identifier
     		)
     
     val Literal: Nonterminal = 
@@ -499,7 +481,7 @@ object Natural {
         )
     
     val ArgumentList: Nonterminal =
-    syn (Expression.+(","))
+    syn (Expression($).+(","))
     
     val ArrayCreationExpression: Nonterminal = 
     syn ( "new" ~ (PrimitiveType | ReferenceType).! ~ DimExpr.+ ~ ("[" ~ "]").!.* 
@@ -507,7 +489,7 @@ object Natural {
         )
     
     val DimExpr: Nonterminal = 
-    syn ("[" ~ Expression ~ "]")
+    syn ("[" ~ Expression($) ~ "]")
     
     val FieldAccess: Nonterminal = 
     syn ( Primary ~ "." ~ Identifier 
@@ -521,131 +503,7 @@ object Natural {
         | "super" ~ "." ~ NonWildTypeArguments.? ~ Identifier ~ "(" ~ ArgumentList.? ~ ")" 
         | ClassName ~ "." ~ "super" ~ "." ~ NonWildTypeArguments.? ~ Identifier ~ "(" ~ ArgumentList.? ~ ")" 
         | TypeName ~ "." ~ NonWildTypeArguments ~ Identifier ~ "(" ~ ArgumentList.? ~ ")"
-        )
-    
-    val ArrayAccess: Nonterminal = 
-    syn ( ExpressionName ~ "[" ~ Expression ~ "]" 
-        | PrimaryNoNewArray ~ "[" ~ Expression ~ "]"
-        )
-    
-    val PostfixExpression: Nonterminal =
-    syn ( Primary
-        | ExpressionName 
-        | PostIncrementExpression 
-        | PostDecrementExpression
-        )
-    
-    val PostIncrementExpression: Nonterminal =
-    syn ( PostfixExpression ~ "++" )
-    
-    val PostDecrementExpression: Nonterminal = 
-    syn ( PostfixExpression ~ "--" )
-    
-    val UnaryExpression: Nonterminal = 
-    syn ( PreIncrementExpression 
-        | PreDecrementExpression 
-        | "+".!>>("+") ~ UnaryExpression 
-        | "-".!>>("-") ~ UnaryExpression 
-        | UnaryExpressionNotPlusMinus
-        )
-    
-    val PreIncrementExpression: Nonterminal = 
-    syn ( "++" ~ UnaryExpression )
-    
-    val PreDecrementExpression: Nonterminal = 
-    syn ( "--" ~ UnaryExpression )
-    
-    val UnaryExpressionNotPlusMinus: Nonterminal = 
-    syn ( PostfixExpression 
-        | "~" ~ UnaryExpression 
-        | "!" ~ UnaryExpression 
-        | CastExpression
-        )
-    
-    val CastExpression: Nonterminal = 
-    syn ( "(" ~ PrimitiveType ~ ")" ~ UnaryExpression 
-        | "(" ~ ReferenceType ~ ")" ~ UnaryExpressionNotPlusMinus
-        )
-    
-    val MultiplicativeExpression: Nonterminal =
-    syn ( UnaryExpression 
-    	  | MultiplicativeExpression ~ "*" ~ UnaryExpression 
-    		| MultiplicativeExpression ~ "/" ~ UnaryExpression 
-    		| MultiplicativeExpression ~ "%" ~ UnaryExpression
-    		)
-    
-    val AdditiveExpression: Nonterminal = 
-    syn ( MultiplicativeExpression 
-    	  | AdditiveExpression ~ "+".!>>("+") ~ MultiplicativeExpression 
-    		| AdditiveExpression ~ "-".!>>("-") ~ MultiplicativeExpression
-    		)
-    
-    val ShiftExpression: Nonterminal = 
-    syn ( AdditiveExpression 
-    		| ShiftExpression ~ "<<" ~ AdditiveExpression 
-    		| ShiftExpression ~ ">>" ~ AdditiveExpression 
-    		| ShiftExpression ~ ">>>" ~ AdditiveExpression
-    	  )
-    
-    val RelationalExpression: Nonterminal = 
-    syn ( ShiftExpression 
-    		| RelationalExpression ~ "<" ~ ShiftExpression 
-    		| RelationalExpression ~ ">" ~ ShiftExpression 
-    		| RelationalExpression ~ "<=" ~ ShiftExpression 
-    		| RelationalExpression ~ ">=" ~ ShiftExpression 
-    		| RelationalExpression ~ "instanceof" ~ ReferenceType
-    		)
-    
-    val EqualityExpression: Nonterminal = 
-    syn ( RelationalExpression 
-        | EqualityExpression ~ "==" ~ RelationalExpression 
-      	| EqualityExpression ~ "!=" ~ RelationalExpression
-      	)
-    
-    val AndExpression: Nonterminal = 
-    syn ( EqualityExpression 
-    	  | AndExpression ~ "&" ~ EqualityExpression
-    	  )
-    
-    val ExclusiveOrExpression: Nonterminal = 
-    syn ( AndExpression 
-    	  | ExclusiveOrExpression ~ "^" ~ AndExpression
-    	  )
-    
-    val InclusiveOrExpression: Nonterminal = 
-    syn ( ExclusiveOrExpression 
-    	  | InclusiveOrExpression ~ "|" ~ ExclusiveOrExpression
-    	  )
-    
-    val ConditionalAndExpression: Nonterminal = 
-    syn ( InclusiveOrExpression 
-    	  | ConditionalAndExpression ~ "&&" ~ InclusiveOrExpression
-    	  )
-    
-    val ConditionalOrExpression: Nonterminal = 
-    syn ( ConditionalAndExpression 
-    	  | ConditionalOrExpression ~ "||" ~ ConditionalAndExpression
-    		)
-    
-    val ConditionalExpression: Nonterminal = 
-    syn ( ConditionalOrExpression 
-  		  | ConditionalOrExpression ~ "?" ~ Expression ~ ":" ~ ConditionalExpression
-    	  )
-    
-    val AssignmentExpression: Nonterminal = 
-    syn ( ConditionalExpression 
-    	  | Assignment
-    	  )
-    
-    val Assignment: Nonterminal = 
-    syn ( LeftHandSide ~ AssignmentOperator ~ AssignmentExpression )
-    
-    val LeftHandSide: Nonterminal = 
-    syn ( ExpressionName 
-    		| "(" ~ LeftHandSide ~ ")" 
-    		| FieldAccess 
-    		| ArrayAccess
-    		)
+        )                  
     
     val AssignmentOperator: Nonterminal = 
     syn ( "=" 
@@ -662,56 +520,56 @@ object Natural {
         | ">>>="
         )
         
-    val Expression: Nonterminal = 
-    syn ( Expression ~ "." ~ Identifier
-        | Expression ~ "." ~ "this"
-        | Expression ~ "." ~ "new" ~ TypeArguments.? ~ Identifier ~ TypeArgumentsOrDiamond.? ~ "(" ~ ArgumentList.? ~ ")" ~ ClassBody.?
-        | Expression ~ "." ~ NonWildTypeArguments ~ ExplicitGenericInvocationSuffix    
-        | Expression ~ "." ~ "super" ~ ("." ~ Identifier).!.? ~ Arguments
-        | Type ~ "." ~ "class"
-        | "void" ~ "." ~ "class"
-        | Expression ~ "(" ~ ArgumentList.? ~ ")"     
-        | Expression ~ "[" ~ Expression ~ "]"
-        | Expression ~ "++"
-        | Expression ~ "--"
-        | "+".!>>("+") ~ Expression
-        | "-".!>>("-") ~ Expression
-        | "++" ~ Expression
-        | "--" ~ Expression 
-        | "!" ~ Expression
-        | "~" ~ Expression
-        | "new" ~ ClassInstanceCreationExpression
-        | "new" ~ ArrayCreationExpression
-        | "(" ~ PrimitiveType ~ ")" ~ Expression
-        | "(" ~ ReferenceType ~ ")" ~ Expression    
-        | Expression ~ "*" ~ Expression 
-        | Expression ~ "/" ~ Expression
-        | Expression ~ "%" ~ Expression
-        | Expression ~ "+".!>>("+") ~ Expression
-        | Expression ~ "-".!>>("-") ~ Expression
-        | Expression ~ "<<" ~ Expression 
-        | Expression ~ ">>".!>>(">") ~ Expression
-        | Expression ~ ">>>" ~ Expression
-        | Expression ~ "<".!>>("[=<]".r) ~ Expression
-        | Expression ~ ">".!>>("[=>]".r) ~ Expression 
-        | Expression ~ "<=" ~ Expression
-        | Expression ~ ">=" ~ Expression
-        | Expression ~ "instanceof" ~ Type 
-        | Expression ~ "==" ~ Expression
-        | Expression ~ "!=" ~ Expression
-        | Expression ~ "&".!>>("&") ~ Expression
-        | Expression ~ "^" ~ Expression
-        | Expression ~ "|".!>>("|") ~ Expression 
-        | Expression ~ "&&" ~ Expression
-        | Expression ~ "||" ~ Expression
-        | Expression ~ "?" ~ Expression ~ ":" ~ Expression 
-        | Expression ~ AssignmentOperator ~ Expression
+    val Expression: OperatorNonterminal = 
+    syn (  Expression ~ "." ~ Identifier
+        |  Expression ~ "." ~ "this"
+        |  Expression ~ "." ~ "new" ~ TypeArguments.? ~ Identifier ~ TypeArgumentsOrDiamond.? ~ "(" ~ ArgumentList.? ~ ")" ~ ClassBody.?
+        |  Expression ~ "." ~ NonWildTypeArguments ~ ExplicitGenericInvocationSuffix    
+        |  Expression ~ "." ~ "super" ~ ("." ~ Identifier).!.? ~ Arguments
+        |  Type ~ "." ~ "class"
+        |  "void" ~ "." ~ "class"
+        |  Expression ~ "(" ~ ArgumentList.? ~ ")"     
+        |  Expression ~ "[" ~ Expression ~ "]"
+        |> Expression ~ "++"
+        |  Expression ~ "--"
+        |> "+".!>>("+") ~ Expression
+        |  "-".!>>("-") ~ Expression
+        |  "++" ~ Expression
+        |  "--" ~ Expression 
+        |  "!" ~ Expression
+        |  "~" ~ Expression
+        |  "new" ~ ClassInstanceCreationExpression
+        |  "new" ~ ArrayCreationExpression
+        |  "(" ~ PrimitiveType ~ ")" ~ Expression
+        |  "(" ~ ReferenceType ~ ")" ~ Expression    
+        |> left ( Expression ~ "*" ~ Expression 
+        |         Expression ~ "/" ~ Expression 
+        |         Expression ~ "%" ~ Expression )
+        |> left ( Expression ~ "+".!>>("+") ~ Expression
+        |         Expression ~ "-".!>>("-") ~ Expression )
+        |> left ( Expression ~ "<<" ~ Expression 
+        |         Expression ~ ">>".!>>(">") ~ Expression
+        |         Expression ~ ">>>" ~ Expression )
+        |> left ( Expression ~ "<".!>>("[=<]".r) ~ Expression
+        |         Expression ~ ">".!>>("[=>]".r) ~ Expression 
+        |         Expression ~ "<=" ~ Expression
+        |         Expression ~ ">=" ~ Expression
+        |         Expression ~ "instanceof" ~ Type ) 
+        |> left ( Expression ~ "==" ~ Expression
+        |         Expression ~ "!=" ~ Expression )
+        |> Expression ~ "&".!>>("&") ~ Expression
+        |> Expression ~ "^" ~ Expression
+        |>  Expression ~ "|".!>>("|") ~ Expression 
+        |> Expression ~ "&&" ~ Expression
+        |> Expression ~ "||" ~ Expression
+        |> Expression ~ "?" ~ Expression ~ ":" ~ Expression 
+        |> Expression ~ AssignmentOperator ~ Expression
         | "(" ~ Expression ~ ")"
         | Primary
         )
 
     val ConstantExpression: Nonterminal = 
-    syn ( Expression )
+    syn ( Expression($) )
     
     val ClassName: Nonterminal = 
     syn ( QualifiedIdentifier )
