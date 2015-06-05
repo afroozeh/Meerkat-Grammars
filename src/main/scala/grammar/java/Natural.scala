@@ -11,14 +11,13 @@ import org.meerkat.Syntax._
 import org.meerkat.tmp._
 import org.meerkat.tmp.Parsers._
 import org.meerkat.tmp.OperatorParsers._
-import grammar.java.lexicals.CharLevel._
 
 /**
  * 
  * The grammar of Java 7 
  * 
  */
-object Natural {
+trait Natural extends Lexicals {
   
     implicit val L = layout(Layout)
   

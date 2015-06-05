@@ -4,9 +4,10 @@ import org.meerkat.Syntax._
 import org.meerkat.tmp._
 import org.meerkat.tmp.Parsers._
 import scala.collection.JavaConversions._
+import grammar.java.Lexicals
 
-object CharLevel {
-      
+trait CharLevel extends Lexicals {
+  
     val UnicodeInputCharacter = 
     syn ( UnicodeEscape 
         | RawInputCharacter
@@ -146,28 +147,28 @@ object CharLevel {
         | OctalDigit ~~ OctalDigitOrUnderscore.** ~~ OctalDigit
         )
     
-    val OctalDigit= 
+    val OctalDigit = 
     syn ( "[0-7]".r )
     
-    val OctalDigitOrUnderscore= 
+    val OctalDigitOrUnderscore = 
     syn ( OctalDigit 
         | "_"
         )
     
-    val BinaryNumeral= 
+    val BinaryNumeral = 
     syn ( "0" ~~ "b" ~~ BinaryDigits 
         | "0" ~~ "B" ~~ BinaryDigits
         )
     
-    val BinaryDigits= 
+    val BinaryDigits = 
     syn ( BinaryDigit 
         | BinaryDigit ~~ BinaryDigitOrUnderscore.** ~~ BinaryDigit
         )
     
-    val BinaryDigit= 
+    val BinaryDigit = 
     syn ( "0" | "1" )
     
-    val BinaryDigitOrUnderscore= 
+    val BinaryDigitOrUnderscore = 
     syn ( BinaryDigit 
         | "_"
         )
@@ -186,53 +187,53 @@ object CharLevel {
     val ExponentIndicator = 
     syn ( "e" | "E" )
     
-    val SignedInteger= 
+    val SignedInteger = 
     syn (  Sign.? ~~ Digits )
     
     val Sign = 
     syn ( "+" | "-" )
     
-    val FloatTypeSuffix= 
+    val FloatTypeSuffix = 
     syn ( "f" | "F" | "d" | "D")
     
-    val HexadecimalFloatingPointLiteral= 
+    val HexadecimalFloatingPointLiteral = 
     syn ( HexSignificand ~~ BinaryExponent ~~ FloatTypeSuffix.? )
     
-    val HexSignificand= 
+    val HexSignificand = 
     syn ( HexNumeral 
         | HexNumeral ~~ "." 
         | "0" ~~ "x" ~~ HexDigits.? ~~ "." ~~ HexDigits 
         | "0" ~~ "X" ~~ HexDigits.? ~~ "." ~~ HexDigits
         )
     
-    val BinaryExponent= 
+    val BinaryExponent = 
     syn ( BinaryExponentIndicator ~~ SignedInteger )
     
-    val BinaryExponentIndicator= 
+    val BinaryExponentIndicator = 
     syn ( "p" | "P" )
     
-    val BooleanLiteral= 
+    val BooleanLiteral = 
     syn ( "true" 
         | "false"
         )
     
-    val CharacterLiteral= 
+    val CharacterLiteral = 
     syn ( "'" ~~ SingleCharacter ~~ "'" 
         | "'" ~~ EscapeSequence ~~ "'"
         )
     
-    val SingleCharacter= 
+    val SingleCharacter = 
     syn ( InputCharacter.\("'", "\\") )
     
-    val StringLiteral= 
+    val StringLiteral = 
     syn ( "\"" ~~ StringCharacter.** ~~ "\"" )
     
-    val StringCharacter= 
+    val StringCharacter = 
     syn ( InputCharacter.\("\"", "\\") 
         | EscapeSequence
         )
     
-    val EscapeSequence= 
+    val EscapeSequence = 
     syn ( Backslash ~~ "b" 
         | Backslash ~~ "t" 
         | Backslash ~~ "n" 
@@ -244,12 +245,12 @@ object CharLevel {
         | OctalEscape
         )
     
-    val Backslash= 
+    val Backslash = 
     syn ( "\\" ~~ u.++ ~~ "005" ~~ ("c" | "C").!
         | "\\"
         )
     
-    val OctalEscape= 
+    val OctalEscape = 
     syn ( "\\" ~~ OctalDigit.!>>("[0-7]".r) 
         | "\\" ~~ OctalDigit ~~ OctalDigit.!>>("[0-7]".r) 
         | "\\" ~~ ZeroToThree ~~ OctalDigit ~~ OctalDigit
@@ -264,8 +265,6 @@ object CharLevel {
     val WhiteSpace = 
     syn (" " | "\t" | "\n" | "\r" | "\f" | "\u0a1a")
 
-    
-    val Keyword:scala.util.matching.Regex = """abstract|continue|for|new|switch|assert|default|if|package|synchronized|boolean|do|goto|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while|true|false|null""".r
     
     // (WhiteSpace | Comment)* !>> [\t \n \r \f  \ ] !>> "/*" !>> "//";
     val Layout: Nonterminal = 

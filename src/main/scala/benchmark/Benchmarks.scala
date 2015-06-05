@@ -5,15 +5,21 @@ import org.meerkat.tmp.Parsers._
 import org.meerkat.util._
 import org.meerkat.benchmark.MeerkatBenchmark
 import java.io.File
+import grammar.java.Specification
+import grammar.java.lexicals.CharLevel
 
 object JavaBenchmark {
-	
-  import grammar.java.Specification._
-  import grammar.java.lexicals.CharLevel._
-  
+	  
   
   def main(args: Array[String]): Unit = {
-    MeerkatBenchmark(start(CompilationUnit), "/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19".load("java")).run
+    
+    val grammar = new Specification with CharLevel {
+      implicit val L = layout(Layout) 
+    }
+    
+    val startSymbol = start(grammar.CompilationUnit)(grammar.L)
+
+    MeerkatBenchmark(startSymbol, "/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19".load("java")).run
     
 //      println(parse(HexIntegerLiteral, "0xFFFFL"))    
     

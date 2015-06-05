@@ -11,17 +11,16 @@ import org.meerkat.Syntax._
 import org.meerkat.tmp._
 import org.meerkat.tmp.Parsers._
 import org.meerkat.tmp.OperatorParsers._
-import grammar.java.lexicals.CharLevel._
 
 /**
  * 
  * The grammar of Java 7 
  * 
  */
-object Specification {
-  
-    implicit val L = layout(Layout)
-  
+trait Specification extends Lexicals  {
+
+    implicit val L: Layout
+    
     val Type: Nonterminal =  
     syn ( PrimitiveType 
         | ReferenceType 
@@ -689,14 +688,5 @@ object Specification {
     syn ( "super" ~ SuperSuffix 
         | Identifier ~ Arguments
         )
-  
-//    
-//    
-//  import org.meerkat.util.Configuration._
-//  
-//  def main(args: Array[String]) {
-//     val input = scala.io.Source.fromFile("test-files/test.java").mkString              
-//     parse(input, start(CompilationUnit), ALL_PARSES, TESTING)
-//  }
-  
+
 }
