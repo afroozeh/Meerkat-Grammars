@@ -3,7 +3,6 @@ package grammar.java.lexicals
 import org.meerkat.Syntax._
 import org.meerkat.tmp._
 import org.meerkat.tmp.Parsers._
-import scala.collection.JavaConversions._
 import grammar.java.Lexicals
 
 trait CharLevel extends Lexicals {

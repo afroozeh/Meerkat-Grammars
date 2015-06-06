@@ -7,13 +7,14 @@ import org.meerkat.benchmark.MeerkatBenchmark
 import java.io.File
 import grammar.java.Specification
 import grammar.java.lexicals.CharLevel
+import grammar.java.lexicals.Regex
 
 object JavaBenchmark {
 	  
   
   def main(args: Array[String]): Unit = {
     
-    val grammar = new Specification with CharLevel {
+    val grammar = new Specification with Regex {
       implicit val L = layout(Layout) 
     }
     
