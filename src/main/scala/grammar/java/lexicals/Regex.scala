@@ -16,7 +16,7 @@ trait Regex extends Lexicals {
   
   val JavaLetter = toTerminal(Regex.JavaLetter)
   val Digit = toTerminal(Regex.Digit)
-  val Identifier = toTerminal(Regex.Identifier)
+  val Identifier = toTerminal(Regex.Identifier) \ Keyword
   val IntegerTypeSuffix = toTerminal(Regex.IntegerTypeSuffix)
   val Digits = toTerminal(Regex.Digits)
   val NonZeroDigit = toTerminal(Regex.NonZeroDigit)
