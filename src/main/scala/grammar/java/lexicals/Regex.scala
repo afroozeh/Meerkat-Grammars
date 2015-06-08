@@ -16,7 +16,7 @@ trait Regex extends Lexicals {
   
   val JavaLetter = toTerminal(Regex.JavaLetter)
   val Digit = toTerminal(Regex.Digit)
-  val Identifier = toTerminal(Regex.Identifier) \ Keyword
+  val Identifier = toTerminal(Regex.Identifier).!<<("""[a-zA-Z_$]""".r) \ Keyword 
   val IntegerTypeSuffix = toTerminal(Regex.IntegerTypeSuffix)
   val Digits = toTerminal(Regex.Digits)
   val NonZeroDigit = toTerminal(Regex.NonZeroDigit)
@@ -104,8 +104,8 @@ object Regex {
   val FloatTypeSuffix: RegularExpression = "[fFdD]"
 
   val DecimalFloatingPointLiteral: RegularExpression = 
-    ( Digits ~ "." ~ Digits.? ~ ExponentPart.? ~ FloatTypeSuffix.?
-    | "." ~ Digits ~ ExponentPart.? ~ FloatTypeSuffix.?
+    ( Digits ~ "\\." ~ Digits.? ~ ExponentPart.? ~ FloatTypeSuffix.?
+    | "\\." ~ Digits ~ ExponentPart.? ~ FloatTypeSuffix.?
     | Digits ~ ExponentPart
     | Digits ~ FloatTypeSuffix
     | Digits ~ ExponentPart ~ FloatTypeSuffix
@@ -113,11 +113,11 @@ object Regex {
     
   val HexSignificand: RegularExpression = 
     ( HexNumeral
-    | HexNumeral ~ "."
-    | "0[xX]" ~ HexDigits.? ~ "." ~ HexDigits
+    | HexNumeral ~ "\\."
+    | "0[xX]" ~ HexDigits.? ~ "\\." ~ HexDigits
     )
     
-  val BinaryExponentIndicator: RegularExpression = "[pP]"  
+  val BinaryExponentIndicator: RegularExpression = "[pP]"
     
   val BinaryExponent: RegularExpression = BinaryExponentIndicator ~ SignedInteger;  
     

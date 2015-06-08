@@ -469,7 +469,7 @@ trait Specification extends Lexicals  {
     val Literal: Nonterminal = 
     syn ( IntegerLiteral 
         | FloatingPointLiteral 
-        | BooleanLiteral 
+        | BooleanLiteral
         | CharacterLiteral 
         | StringLiteral 
         | NullLiteral

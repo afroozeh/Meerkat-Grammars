@@ -8,6 +8,7 @@ import java.io.File
 import grammar.java.Specification
 import grammar.java.lexicals.CharLevel
 import grammar.java.lexicals.Regex
+import org.meerkat.util.visualization._
 
 object JavaBenchmark {
 	  
@@ -22,10 +23,12 @@ object JavaBenchmark {
 
     MeerkatBenchmark(startSymbol, "/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19".load("java")).run
     
-//      println(parse(HexIntegerLiteral, "0xFFFFL"))    
+//    val input = Input("123")
+//    val t = parse(grammar.FloatingPointLiteral, input)
+//    visualize(t.right.get.sppf, input)
     
-//    val l = List(new File("/Users/aliafroozeh/corpus/Java/jdk1.7.0_60-b19/src/com/sun/corba/se/impl/corba/TCUtility.java"))
-//    MeerkatBenchmark(start(CompilationUnit), l).run
+//    val l = List(new File("/Users/aliafroozeh/Test.java"))
+//    MeerkatBenchmark(startSymbol, l).run
   }
   
 }
