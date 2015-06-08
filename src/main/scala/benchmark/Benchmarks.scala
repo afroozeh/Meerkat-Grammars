@@ -9,13 +9,14 @@ import grammar.java.Specification
 import grammar.java.lexicals.CharLevel
 import grammar.java.lexicals.Regex
 import org.meerkat.util.visualization._
+import grammar.java.Natural
 
 object JavaBenchmark {
 	  
   
   def main(args: Array[String]): Unit = {
     
-    val grammar = new Specification with Regex {
+    val grammar = new Natural with CharLevel {
       implicit val L = layout(Layout) 
     }
     

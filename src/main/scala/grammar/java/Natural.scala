@@ -462,22 +462,7 @@ trait Natural extends Lexicals {
         | HexadecimalFloatingPointLiteral
         )
     
-    val TypeArgumentsOrDiamond: Nonterminal = 
-    syn ( "<" ~ ">" 
-        | TypeArguments
-        )
-    
-    val ArgumentList: Nonterminal =
-    syn (Expression($).+(","))
-    
-    val ArrayCreationExpression: Nonterminal = 
-    syn ( "new" ~ (PrimitiveType | ReferenceType).! ~ DimExpr.+ ~ ("[" ~ "]").!.* 
-        | "new" ~ (PrimitiveType | ReferenceTypeNonArrayType).! ~ ("[" ~ "]").!.+ ~ ArrayInitializer
-        )
-    
-    val DimExpr: Nonterminal = 
-    syn ("[" ~ Expression($) ~ "]")
-    
+
     val FieldAccess: Nonterminal = 
     syn ( Primary ~ "." ~ Identifier 
         | "super" ~ "." ~ Identifier 
@@ -563,17 +548,30 @@ trait Natural extends Lexicals {
         )        
 
     val ClassInstanceCreationExpression: Nonterminal =
-    syn ( TypeArguments.? ~ TypeDeclSpecifier ~ TypeArgumentsOrDiamond.? ~ "(" ~ ArgumentList.? ~ ")" ~ ClassBody.? ) 
+    syn ( TypeArguments.? ~ TypeDeclSpecifier ~ TypeArgumentsOrDiamond.? ~ "(" ~ ArgumentList.? ~ ")" ~ ClassBody.? )
+    
+    val TypeArgumentsOrDiamond: Nonterminal = 
+    syn ( "<" ~ ">" 
+        | TypeArguments
+        )
+
+    val ArgumentList: Nonterminal =
+    syn (Expression($).+(","))
+
+    val ArrayCreationExpression: Nonterminal = 
+    syn ( (PrimitiveType | ReferenceType).! ~ DimExpr.+ ~ ("[" ~ "]").!.* 
+        | (PrimitiveType | ReferenceTypeNonArrayType).! ~ ("[" ~ "]").!.+ ~ ArrayInitializer
+        )
+    
+    val DimExpr: Nonterminal = 
+    syn ("[" ~ Expression($) ~ "]")
         
     val ConstantExpression: Nonterminal = 
     syn ( Expression($) )
     
     val ClassName: Nonterminal = 
     syn ( QualifiedIdentifier )
-    
-    val ExpressionName: Nonterminal = 
-    syn ( QualifiedIdentifier )
-    
+        
     val MethodName: Nonterminal = 
     syn ( QualifiedIdentifier )
     
