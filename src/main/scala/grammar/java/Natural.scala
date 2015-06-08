@@ -19,7 +19,7 @@ import org.meerkat.tmp.OperatorParsers._
  */
 trait Natural extends Lexicals {
   
-    implicit val L = layout(Layout)
+    implicit val L: Layout
   
     val Type: Nonterminal =  
     syn ( PrimitiveType 
@@ -441,13 +441,6 @@ trait Natural extends Lexicals {
     val ForUpdate: Nonterminal = 
     syn ( StatementExpression.+(",") )
     
-    val Primary: Nonterminal =  
-    syn ( Literal 
-    		| "this"
-        | "super"
-    		| Identifier
-    		)
-    
     val Literal: Nonterminal = 
     syn ( IntegerLiteral 
         | FloatingPointLiteral 
@@ -467,11 +460,6 @@ trait Natural extends Lexicals {
     val FloatingPointLiteral: Nonterminal = 
     syn ( DecimalFloatingPointLiteral 
         | HexadecimalFloatingPointLiteral
-        )
-    
-    val ClassInstanceCreationExpression: Nonterminal = 
-    syn ( "new" ~ TypeArguments.? ~ TypeDeclSpecifier ~ TypeArgumentsOrDiamond.? ~ "(" ~ ArgumentList.? ~ ")" ~ ClassBody.? 
-        | (Primary | QualifiedIdentifier).! ~ "." ~ "new" ~ TypeArguments.? ~ Identifier ~ TypeArgumentsOrDiamond.? ~ "(" ~ ArgumentList.? ~ ")" ~ ClassBody.?
         )
     
     val TypeArgumentsOrDiamond: Nonterminal = 
@@ -566,7 +554,17 @@ trait Natural extends Lexicals {
         | "(" ~ Expression ~ ")"
         | Primary
         )
+        
+    val Primary: Nonterminal =  
+    syn ( Literal 
+        | "this"
+        | "super"
+        | Identifier
+        )        
 
+    val ClassInstanceCreationExpression: Nonterminal =
+    syn ( TypeArguments.? ~ TypeDeclSpecifier ~ TypeArgumentsOrDiamond.? ~ "(" ~ ArgumentList.? ~ ")" ~ ClassBody.? ) 
+        
     val ConstantExpression: Nonterminal = 
     syn ( Expression($) )
     
