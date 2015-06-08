@@ -7,7 +7,7 @@ import java.util.Arrays
 
 trait Lexicals {
   
-  type T = Parsers.Symbol { type Value = org.meerkat.tmp.NoValue }
+  type T = Parsers.Symbol[org.meerkat.tmp.NoValue]
   
   def JavaLetter: T
   def Digit: T
