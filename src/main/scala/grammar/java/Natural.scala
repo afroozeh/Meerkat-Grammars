@@ -121,7 +121,7 @@ trait Natural extends Lexicals {
         )
     
     val NormalClassDeclaration: Nonterminal = 
-    syn ( ClassModifier.* ~ "class" ~ Identifier ~ TypeParameters.? ~ ("extends" ~ Type).!.? ~ ("implements" ~ TypeList).!.? ~ ClassBody )
+    syn ( ClassModifier.* ~ " class" ~ Identifier ~ TypeParameters.? ~ ("extends" ~ Type).!.? ~ ("implements" ~ TypeList).!.? ~ ClassBody )
     
     val ClassModifier: Nonterminal = 
     syn ( Annotation 

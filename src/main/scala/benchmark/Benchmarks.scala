@@ -41,7 +41,7 @@ object JavaBenchmark {
   
   def main(args: Array[String]): Unit = {
     
-    val grammar = new Specification with CharLevel {
+    val grammar = new Specification with CharLevel { import org.meerkat.Syntax.layout
       implicit val L = layout(Layout) 
     }
     
@@ -67,7 +67,7 @@ object GammaBenchmark {
     
     for (i <- 1 to 10) {
       parse(S, getInput(300)) match {
-        case Right(x) => println(x.stat)
+        case Right(x) => println(x.parseTimeStatistics)
         case Left(x)  => println("Parse error")
       }
     }
